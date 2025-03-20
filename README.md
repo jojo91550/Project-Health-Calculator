@@ -21,7 +21,6 @@ Un microservice Python qui calcule des métriques de santé (IMC et MB) via une 
 ```
 ## Structure du projet
 
-```bash
 health-calculator-service/
 ├── app.py              # Application Flask avec endpoints et interface utilisateur
 ├── health_utils.py     # Fonctions utilitaires pour les calculs
