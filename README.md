@@ -1,88 +1,195 @@
-# Flask App - DevOps Project Template
+# Health Calculator Microservice
 
-This repository serves as a template for a simple Flask-based DevOps project. The app provides basic calculator functionalities (addition and subtraction) and includes all necessary files for setting up a local environment, running tests, and deploying to a cloud service with best practices in DevOps.
+Un microservice Python qui calcule des métriques de santé (IMC et MB) via une API REST. Projet conteneurisé avec Docker, géré avec Makefile, et prêt pour le déploiement sur Azure.
 
-## Project Structure
+## Fonctionnalités
 
-The repository is organized as follows:
+- **Calcul d'IMC (Indice de Masse Corporelle)**
+  - Formule utilisée: `IMC = poids (kg) / (taille (m))²`
+  - Catégorisation (Insuffisance pondérale, Normal, Surpoids, Obésité)
 
-```plaintext
-DEVOPS-PROJECT/
-├── app.py
-├── utils.py
-├── test.py
-├── requirements.txt
-├── Makefile
-├── templates/
-│   └── home.html
-├── .env
-├── .gitignore
+- **Calcul de MB (Métabolisme de Base)** selon l'équation de Harris-Benedict
+  - Pour les hommes: `MB = 88.362 + (13.397 × poids en kg) + (4.799 × taille en cm) - (5.677 × âge en années)`
+  - Pour les femmes: `MB = 447.593 + (9.247 × poids en kg) + (3.098 × taille en cm) - (4.330 × âge en années)`
+
+- **Interface utilisateur web**
+  - Formulaires pour calculer l'IMC et le MB directement dans le navigateur
+  - Documentation des API intégrée
+
+## Structure du projet
+
+```
+health-calculator-service/
+├── app.py              # Application Flask avec endpoints et interface utilisateur
+├── health_utils.py     # Fonctions utilitaires pour les calculs
+└── test.py             # Tests unitaires
+
+Dockerfile              # Configuration Docker (à la racine)
+Makefile                # Automatisation des tâches (à la racine)
+requirements.txt        # Dépendances du projet (à la racine)
 ```
 
-### File Descriptions
+## Prérequis
 
-- **`app.py`**: The main application file for the Flask app. It sets up routes and connects them to functions in `utils.py` to provide API endpoints for app operations.
+- Python 3.9 ou supérieur
+- pip (gestionnaire de paquets Python)
+- Docker (pour la conteneurisation)
+- Git (pour le versionnement)
 
-- **`utils.py`**: Contains utility functions for core operations like addition and subtraction. This file is designed to house the main logic for the app’s functionality.
+## Installation et utilisation
 
-- **`test.py`**: A unit test file that includes tests for the functions defined in `utils.py`. This file ensures that the core functionality behaves as expected.
+### 1. Création de l'environnement virtuel Python
 
-- **`requirements.txt`**: Lists the Python dependencies needed to run the application. This file is used to install the necessary packages in the project environment.
+Avant d'installer les dépendances, il est recommandé de créer un environnement virtuel Python pour isoler votre projet:
 
-- **`Makefile`**: A makefile to streamline project setup and operations. Includes commands for:
-  - `make init`: Install project dependencies.
-  - `make run`: Start the Flask app.
-  - `make test`: Run all unit tests.
+```bash
+# Création de l'environnement virtuel
+python3 -m venv .venv
 
-- **`templates/home.html`**: HTML template for the app's user interface. This file provides input fields and buttons for interacting with the calculator operations.
+# Activation de l'environnement virtuel (Windows)
+.venv\Scripts\activate
 
-- **`.env`**: A configuration file for environment variables. It’s used to securely store sensitive information (like API keys, database credentials, or environment-specific settings). **Note**: This file should not be committed to version control for security reasons.
+# Activation de l'environnement virtuel (Linux/macOS)
+source .venv/bin/activate
+```
 
-- **`.gitignore`**: Specifies files and directories that should be ignored by Git. It typically includes files such as `.env` and compiled Python files (`__pycache__`), as well as local environment and dependency caches.
+Vous saurez que l'environnement virtuel est activé quand vous verrez `(.venv)` au début de votre ligne de commande.
 
-## Getting Started
+### 2. Installation des dépendances
 
-1. **Clone the Repository**:
-   ```bash
-   git clone <repository-url>
-   cd DEVOPS-PROJECT
-   ```
+Une fois l'environnement virtuel activé:
 
-2. **Set Up the Environment**:
-   - Create and activate a virtual environment (recommended for managing dependencies).
-   - Install the dependencies:
-     ```bash
-     make init
-     ```
+```bash
+make init
+```
 
-3. **Run the Application**:
-   - Start the Flask app locally:
-     ```bash
-     make run
-     ```
+### 3. Exécuter les tests
 
+```bash
+make test
+```
 
-4. **Run Tests**:
-   - Execute unit tests to verify functionality:
-     ```bash
-     make test
-     ```
+### 4. Lancer l'application en mode développement
 
-## Additional Configuration
+```bash
+make run
+```
 
-- **Environment Variables**:
-  - Use the `.env` file to store any environment-specific configurations or sensitive information. Be sure to keep this file out of version control by listing it in `.gitignore`.
+L'application sera accessible à l'adresse http://localhost:5000
 
-## Deployment Instructions
+### 5. Construction de l'image Docker
 
-For deployment, configure CI/CD pipelines according to your preferred platform (e.g., GitHub Actions, Azure Pipelines). This template can be used with cloud deployment platforms like AWS, Azure, or Heroku for easy scalability.
-  - Use `pipeline.yaml` as a template for a pipeline to build and deploy an application on Azure
+```bash
+make build
+```
 
-## Author
+### 6. Exécuter l'application dans un conteneur Docker
 
-This template was created by **Ali Mokh** and is intended as an educational resource for DevOps projects involving Flask applications.
+```bash
+make docker-run
+```
 
-## License and Usage
+L'application conteneurisée sera accessible à l'adresse http://localhost:5000
 
-This project template is open to use by anyone and may be freely adapted for personal or professional projects. If you use this template as part of teaching materials or educational content, please cite **Ali Mokh** as the original author.
+### 7. Arrêter le conteneur Docker
 
+```bash
+make docker-stop
+```
+
+### 8. Nettoie les fichiers temporaires et compilés
+
+```bash
+make clean
+```
+
+### 9. Désactivation de l'environnement virtuel
+
+Lorsque vous avez terminé de travailler sur le projet:
+
+```bash
+deactivate
+```
+
+## Commandes du Makefile
+
+| Commande | Description |
+|----------|-------------|
+| `make init` | Installe les dépendances nécessaires |
+| `make run` | Lance l'application en mode développement |
+| `make test` | Exécute les tests unitaires |
+| `make build` | Construit l'image Docker |
+| `make docker-run` | Lance l'application dans un conteneur Docker |
+| `make docker-stop` | Arrête le conteneur Docker |
+| `make clean` | Nettoie les fichiers temporaires et compilés |
+
+## Utilisation des API
+
+### Calcul de l'IMC
+
+**Endpoint**: `/bmi` (POST)
+
+**Corps de la requête**:
+```json
+{
+  "height": 1.75,  // Taille en mètres
+  "weight": 70     // Poids en kilogrammes
+}
+```
+
+**Exemple avec curl**:
+```bash
+curl -X POST http://localhost:5000/bmi \
+  -H "Content-Type: application/json" \
+  -d '{"height": 1.75, "weight": 70}'
+```
+
+**Réponse**:
+```json
+{
+  "bmi": 22.86,
+  "category": "Normal weight"
+}
+```
+
+### Calcul du MB
+
+**Endpoint**: `/bmr` (POST)
+
+**Corps de la requête**:
+```json
+{
+  "height": 175,     // Taille en centimètres
+  "weight": 70,      // Poids en kilogrammes
+  "age": 30,         // Âge en années
+  "gender": "male"   // Genre: "male" ou "female"
+}
+```
+
+**Exemple avec curl**:
+```bash
+curl -X POST http://localhost:5000/bmr \
+  -H "Content-Type: application/json" \
+  -d '{"height": 175, "weight": 70, "age": 30, "gender": "male"}'
+```
+
+**Réponse**:
+```json
+{
+  "bmr": 1695.67,
+  "unit": "calories/day"
+}
+```
+
+## Tests
+
+Le projet inclut des tests unitaires pour les fonctions principales:
+- Tests des calculs d'IMC
+- Tests des calculs de MB pour hommes et femmes
+
+Les tests peuvent être exécutés avec la commande `make test`.
+
+## Prochaines étapes
+
+- CI/CD Pipeline avec GitHub Actions
+- Déploiement sur Azure App Service
