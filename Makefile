@@ -1,20 +1,20 @@
 # Installer les dépendances
 init:
 	@echo "Installing dependencies..."
-	python -m pip install --upgrade pip
+	python3 -m pip install --upgrade pip
 	pip install -r requirements.txt
 
 # Exécuter l'application Flask
 run:
 	@echo "Running the Flask app..."
-	cd health-calculator-service && python app.py
+	cd health-calculator-service && python3 app.py
 
 # Exécuter les tests
 test:
 	@echo "Running tests..."
 	cd health-calculator-service && \
 	pip install pytest && \
-	python -m unittest test.py
+	python3 -m unittest test.py
 
 # Construire l'image Docker
 build:
