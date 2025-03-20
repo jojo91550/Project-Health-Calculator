@@ -23,10 +23,9 @@ health-calculator-service/
 ├── app.py              # Application Flask avec endpoints et interface utilisateur
 ├── health_utils.py     # Fonctions utilitaires pour les calculs
 └── test.py             # Tests unitaires
-
-Dockerfile              # Configuration Docker (à la racine)
-Makefile                # Automatisation des tâches (à la racine)
-requirements.txt        # Dépendances du projet (à la racine)
+│Dockerfile              # Configuration Docker (à la racine)
+│Makefile                # Automatisation des tâches (à la racine)
+│requirements.txt        # Dépendances du projet (à la racine)
 ```
 
 ## Prérequis
