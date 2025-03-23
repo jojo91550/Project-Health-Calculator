@@ -51,15 +51,20 @@ jobs:
           tags: |
             ghcr.io/${{ github.repository_owner }}/health-calculator:latest
             ghcr.io/${{ github.repository_owner }}/health-calculator:${{ github.sha }}
+      
+      # Déployer avec l'image Docker
+      - name: Login to Azure
+        uses: azure/login@v1
+        with:
+          creds: ${{ secrets.AZURE_CREDENTIALS }}
           
-      # Déploiement uniquement si c'est un push sur main (pas pour les pull requests)
       - name: Deploy to Azure Web App
-        uses: azure/webapps-deploy@v2
         if: github.ref == 'refs/heads/main' && github.event_name == 'push'
+        uses: azure/webapps-deploy@v2
         with:
           app-name: 'health-calculator-app-js'
           publish-profile: ${{ secrets.AZURE_WEBAPP_PUBLISH_PROFILE }}
-          package: './health-calculator-service'  
+          images: 'ghcr.io/${{ github.repository_owner }}/health-calculator:${{ github.sha }}'
           
       - name: Display App URL
         if: github.ref == 'refs/heads/main' && github.event_name == 'push'
