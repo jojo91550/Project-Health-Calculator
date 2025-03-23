@@ -1,0 +1,42 @@
+name: CI/CD Pipeline
+
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+    branches:
+      - main
+
+jobs:
+  build-test-deploy:
+    runs-on: ubuntu-latest
+    
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+      
+      - name: Set up Python
+        uses: actions/setup-python@v2
+        with:
+          python-version: '3.9'
+      
+      - name: Install dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install -r requirements.txt
+      
+      - name: Run tests
+        run: |
+          cd health-calculator-service
+          pip install pytest
+          python -m unittest test.py
+      
+      # Déploiement uniquement si c'est un push sur main (pas pour les pull requests)
+      - name: Deploy to Azure Web App
+        uses: azure/webapps-deploy@v2
+        if: github.ref == 'refs/heads/main' && github.event_name == 'push'
+        with:
+          app-name: 'health-calculator-app'
+          publish-profile: ${{ secrets.AZURE_WEBAPP_PUBLISH_PROFILE }}
+          package: '.'  
