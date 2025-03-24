@@ -1,6 +1,6 @@
 # Health Calculator Microservice
 
-Un microservice Python qui calcule des métriques de santé (IMC et MB) via une API REST. Projet conteneurisé avec Docker, géré avec Makefile, et prêt pour le déploiement sur Azure.
+Un microservice Python qui calcule des métriques de santé (IMC et MB) via une API REST. Projet conteneurisé avec Docker, géré avec Makefile, et déployé sur Azure via CI/CD.
 
 ## Fonctionnalités
 
@@ -19,15 +19,19 @@ Un microservice Python qui calcule des métriques de santé (IMC et MB) via une 
 ## Structure du projet
 
 ```
-## Structure du projet
-
-health-calculator-service/
-├── app.py              # Application Flask avec endpoints et interface utilisateur
-├── health_utils.py     # Fonctions utilitaires pour les calculs
-└── test.py             # Tests unitaires
-Dockerfile              # Configuration Docker (à la racine)
-Makefile                # Automatisation des tâches (à la racine)
-requirements.txt        # Dépendances du projet (à la racine)
+PROJECT-HEALTH-CALCULATOR/
+├── .github/
+│   └── workflows/
+│       └── ci-cd.yml          # Configuration CI/CD GitHub Actions
+├── health-calculator-service/
+│   ├── app.py                 # Application Flask avec endpoints et interface utilisateur
+│   ├── health_utils.py        # Fonctions utilitaires pour les calculs
+│   └── test.py                # Tests unitaires
+├── Dockerfile                 # Configuration Docker
+├── Makefile                   # Automatisation des tâches
+├── README.md                  # Documentation du projet
+├── requirements.txt           # Dépendances du projet
+└── Health app Project.pdf     # Documentation du projet original
 ```
 
 ## Prérequis
@@ -98,7 +102,7 @@ L'application conteneurisée sera accessible à l'adresse http://localhost:5000
 make docker-stop
 ```
 
-### 8. Nettoie les fichiers temporaires et compilés
+### 8. Nettoyer l'environnement
 
 ```bash
 make clean
@@ -182,6 +186,40 @@ curl -X POST http://localhost:5000/bmr \
 }
 ```
 
+## CI/CD et Déploiement
+
+Ce projet utilise GitHub Actions pour l'intégration continue et le déploiement continu (CI/CD), et Azure App Service pour l'hébergement.
+
+### Pipeline CI/CD
+
+Le pipeline CI/CD est configuré dans le fichier `.github/workflows/ci-cd.yml` et effectue les actions suivantes:
+
+1. **Build**: 
+   - Vérifie le code source
+   - Configure l'environnement Python
+   - Installe les dépendances
+   - Exécute les tests unitaires
+   - Construit l'image Docker
+   - Publie l'image dans GitHub Container Registry
+
+2. **Deploy**:
+   - Déploie l'image Docker sur Azure App Service
+   - Le déploiement est automatiquement déclenché lors d'un push sur la branche `main`
+
+### Application déployée
+
+L'application est déployée et accessible à l'URL suivante:
+```
+https://health-calculator-app-js-e4g9aqbea7c3f7hg.canadacentral-01.azurewebsites.net
+```
+
+### GitHub Container Registry
+
+L'image Docker du projet est stockée dans GitHub Container Registry sous:
+```
+ghcr.io/jojo91550/project-health-calculator:latest
+```
+
 ## Tests
 
 Le projet inclut des tests unitaires pour les fonctions principales:
@@ -190,7 +228,6 @@ Le projet inclut des tests unitaires pour les fonctions principales:
 
 Les tests peuvent être exécutés avec la commande `make test`.
 
-## Prochaines étapes
 
-- CI/CD Pipeline avec GitHub Actions
-- Déploiement sur Azure App Service
+
+
