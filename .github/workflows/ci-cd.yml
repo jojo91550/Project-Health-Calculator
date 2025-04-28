@@ -1,7 +1,7 @@
 name: CI/CD Pipeline
 
 env:
-  AZURE_WEBAPP_NAME: health-calculator-app-js  # nom de votre Azure Web App
+  AZURE_WEBAPP_NAME: Health-calculator  # nom de votre Azure Web App
 
 on:
   push:
