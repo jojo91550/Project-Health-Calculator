@@ -210,7 +210,7 @@ Le pipeline CI/CD est configuré dans le fichier `.github/workflows/ci-cd.yml` e
 
 L'application est déployée et accessible à l'URL suivante:
 ```
-https://health-calculator-app-js-e4g9aqbea7c3f7hg.canadacentral-01.azurewebsites.net
+https://health-calculator-brgxgggqg8btfahf.canadacentral-01.azurewebsites.net
 ```
 
 ### GitHub Container Registry
